@@ -5,7 +5,7 @@ import {
   UserGroupIcon,
   AcademicCapIcon,
 } from '@heroicons/react/16/solid';
-import { motion, stagger } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Benefit } from './Benefit';
 
 const benefits: Array<BenefitType> = [
@@ -30,7 +30,7 @@ const benefits: Array<BenefitType> = [
 const container = {
   hidden: {},
   visible: {
-    transitioin: { staggerChildren: 0.2 },
+    transition: { staggerChildren: 0.2 },
   },
 };
 
