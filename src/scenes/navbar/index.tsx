@@ -1,8 +1,15 @@
+// Navbar.tsx
+import { useTheme } from '@/ThemeContext';
 import Logo from '@/assets/Logo.png';
 import Link from './Link';
 import { SelectedPage } from '@/shared/types';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/16/solid';
+import {
+  Bars3Icon,
+  XMarkIcon,
+  SunIcon,
+  MoonIcon,
+} from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import ActionButton from '@/shared/ActionButton';
 
@@ -16,15 +23,19 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
   const flexBetween = 'flex items-center justify-between';
   const [isMenuToggled, setIsMenutoggled] = useState<boolean>(false);
   const isAboveMediumScreens = useMediaQuery('(min-width: 1060px)');
+  const { theme, toggleTheme } = useTheme();
+  const isDarkMode = theme === 'dark';
 
   const navbarBackground = isTopOfPage
     ? 'bg-transparent'
-    : 'bg-primary-100 drop-shadow';
+    : isDarkMode
+      ? 'bg-gray-800 drop-shadow'
+      : 'bg-white drop-shadow';
 
   return (
     <nav>
       <div
-        className={`${navbarBackground} ${flexBetween} fixed top-0 z-30 w-full py-6 transition duration-300`}
+        className={`${navbarBackground} ${flexBetween} fixed top-0 z-30 w-full py-6`}
       >
         <div className={`${flexBetween} mx-auto w-5/6`}>
           <div className={`${flexBetween} w-full gap-16`}>
@@ -32,7 +43,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
             {isAboveMediumScreens ? (
               <div className={`${flexBetween} w-full`}>
                 <div
-                  className={`${flexBetween} gap-8 font-montserrat text-sm ${isTopOfPage ? 'text-light-burgundy' : 'text-gray-900'}`}
+                  className={`${flexBetween} gap-8 font-montserrat text-sm ${isDarkMode ? 'text-red-400' : 'text-black'}`}
                 >
                   <Link
                     page="Home"
@@ -56,27 +67,51 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                   />
                 </div>
                 <div
-                  className={`${flexBetween} gap-8 ${isTopOfPage ? 'text-light-burgundy' : 'text-gray-900'}`}
+                  className={`${flexBetween} gap-8 ${isDarkMode ? 'text-red-400' : 'text-black'}`}
                 >
                   <p>Sign In</p>
                   <ActionButton setSelectedPage={setSelectedPage}>
                     Become a Member
                   </ActionButton>
                 </div>
+                {/* Превключвател за темата */}
+                <div className="flex items-center">
+                  <SunIcon
+                    className={`h-6 w-6 ${isDarkMode ? 'text-gray-400' : 'text-red-500'}`}
+                  />
+                  <label className="relative ml-2 inline-flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={isDarkMode}
+                      onChange={toggleTheme}
+                      className="sr-only"
+                    />
+                    <div className="h-6 w-10 rounded-full bg-gray-200 shadow-inner"></div>
+                    <div
+                      className={`dot absolute h-4 w-4 rounded-full bg-red-500 transition-transform duration-300 ease-in-out ${isDarkMode ? 'translate-x-4' : 'translate-x-0'}`}
+                    ></div>
+                  </label>
+                  <MoonIcon
+                    className={`h-6 w-6 ${isDarkMode ? 'text-red-500' : 'text-gray-400'} ml-2`}
+                  />
+                </div>
               </div>
             ) : (
               <button
-                className="rounded-full bg-secondary-500 p-2"
+                className="rounded-full bg-gray-800 p-2"
                 onClick={() => setIsMenutoggled(!isMenuToggled)}
               >
-                <Bars3Icon className="h-6 w-6 text-white" />
+                <Bars3Icon className="h-6 w-6 text-red-500" />
               </button>
             )}
           </div>
         </div>
       </div>
+      {/* MOBILE MENU MODAL */}
       {!isAboveMediumScreens && isMenuToggled && (
-        <div className="fixed bottom-0 right-0 z-40 h-full w-[300px] bg-primary-100 drop-shadow-xl">
+        <div
+          className={`fixed bottom-0 right-0 z-40 h-full w-[300px] ${isDarkMode ? 'bg-gray-800' : 'bg-white'} drop-shadow-xl`}
+        >
           <div className="flex justify-end p-12">
             <button onClick={() => setIsMenutoggled(!isMenuToggled)}>
               <XMarkIcon className="h-6 w-6 text-gray-400" />

@@ -1,3 +1,4 @@
+// Home.tsx
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { SelectedPage } from '@/shared/types';
 import ActionButton from '@/shared/ActionButton';
@@ -9,6 +10,7 @@ import SponsorFortune from '@/assets/SponsorFortune.png';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { useTheme } from '@/ThemeContext'; // Импортирайте useTheme
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
@@ -17,6 +19,7 @@ type Props = {
 export const Home = ({ setSelectedPage }: Props) => {
   const isAboveMediumScreens = useMediaQuery('(min-width:1060px)');
   const [scrolling, setScrolling] = useState(false);
+  const { isDarkMode } = useTheme(); // Извличане на isDarkMode
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,7 +36,7 @@ export const Home = ({ setSelectedPage }: Props) => {
   return (
     <section
       id="home"
-      className="h-auto gap-10 overflow-hidden bg-gray-20 py-6 md:h-full md:gap-16 md:pb-0"
+      className={`h-auto gap-10 overflow-hidden ${isDarkMode ? 'bg-gray-900' : 'bg-white'} py-6 md:h-full md:gap-16 md:pb-0`}
     >
       <motion.div
         className="mx-auto w-5/6 items-center justify-center md:flex md:h-5/6"
@@ -63,7 +66,7 @@ export const Home = ({ setSelectedPage }: Props) => {
               </div>
             </div>
             <motion.p
-              className={`mt-4 text-left text-sm text-red-800 transition-opacity duration-500 ${scrolling ? 'opacity-0' : 'opacity-100'}`}
+              className={`mt-4 text-left text-sm ${isDarkMode ? 'text-red-400' : 'text-black'} transition-opacity duration-500 ${scrolling ? 'opacity-0' : 'opacity-100'}`}
             >
               We offer services such as ECU Tuning, Remap, Immo Off, DPF / EGR
               Off, Lamb Off
@@ -86,7 +89,7 @@ export const Home = ({ setSelectedPage }: Props) => {
               Join Now
             </ActionButton>
             <AnchorLink
-              className="text-sm font-bold text-primary-500 underline hover:text-secondary-500"
+              className={`text-sm font-bold ${isDarkMode ? 'text-red-400' : 'text-primary-500'} underline hover:${isDarkMode ? 'text-red-500' : 'text-secondary-500'}`}
               onClick={() => setSelectedPage(SelectedPage.ContactUs)}
               href={`#${SelectedPage.ContactUs}`}
             >
@@ -110,7 +113,9 @@ export const Home = ({ setSelectedPage }: Props) => {
         </div>
       </motion.div>
       {isAboveMediumScreens && (
-        <div className="h-[150px] w-full bg-primary-100 py-10">
+        <div
+          className={`h-[150px] w-full py-10 ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}
+        >
           <div className="mx-auto w-5/6">
             <div className="flex w-3/5 items-center justify-between gap-8">
               <img alt="redbull-sponsor" src={SponsorRedBull} />
