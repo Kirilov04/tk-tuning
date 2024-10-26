@@ -8,6 +8,7 @@ import SponsorForbes from '@/assets/SponsorForbes.png';
 import SponsorFortune from '@/assets/SponsorFortune.png';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
@@ -15,16 +16,30 @@ type Props = {
 
 export const Home = ({ setSelectedPage }: Props) => {
   const isAboveMediumScreens = useMediaQuery('(min-width:1060px)');
+  const [scrolling, setScrolling] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolling(window.scrollY > 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <section
       id="home"
-      className="md: gap-16 bg-gray-20 py-10 md:h-full md:pb-0"
+      className="h-auto gap-10 overflow-hidden bg-gray-20 py-6 md:h-full md:gap-16 md:pb-0"
     >
       <motion.div
         className="mx-auto w-5/6 items-center justify-center md:flex md:h-5/6"
         onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
       >
-        <div className="z-10 mt-32 md:basis-3/5">
+        <div className="z-10 mt-32 w-full max-w-full md:basis-3/5">
           <motion.div
             className="md:-mt-20"
             initial="hidden"
@@ -38,18 +53,24 @@ export const Home = ({ setSelectedPage }: Props) => {
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="relative">
+            <div className="relative pl-4">
               <div className="before:absolute before:-top-20 before:text-gray-700 before:opacity-10 before:content-evolvetext">
-                <img alt="home-page-text" src={HomePageText} />
+                <img
+                  alt="home-page-text"
+                  src={HomePageText}
+                  className="mx-auto w-full max-w-[90%]"
+                />
               </div>
             </div>
-            <p className="mt-8 text-sm text-red-800">
+            <motion.p
+              className={`mt-4 text-left text-sm text-red-800 transition-opacity duration-500 ${scrolling ? 'opacity-0' : 'opacity-100'}`}
+            >
               We offer services such as ECU Tuning, Remap, Immo Off, DPF / EGR
               Off, Lamb Off
-            </p>
+            </motion.p>
           </motion.div>
           <motion.div
-            className="mt-8 flex items-center gap-8 md:justify-start"
+            className="mt-8 flex items-center justify-end gap-4 md:justify-start md:gap-8"
             initial="hidden"
             whileInView="visible"
             exit="exit"
@@ -65,15 +86,15 @@ export const Home = ({ setSelectedPage }: Props) => {
               Join Now
             </ActionButton>
             <AnchorLink
-              className="font-bolf text-sm text-primary-500 underline hover:text-secondary-500"
+              className="text-sm font-bold text-primary-500 underline hover:text-secondary-500"
               onClick={() => setSelectedPage(SelectedPage.ContactUs)}
-              href={'#${SelectedPage.ContactUs}'}
+              href={`#${SelectedPage.ContactUs}`}
             >
               <p>Learn More</p>
             </AnchorLink>
           </motion.div>
         </div>
-        <div className="md flex basis-3/5 justify-center md:z-10 md:ml-40 md:mt-16 md:justify-items-end">
+        <div className="flex basis-3/5 justify-end md:ml-40 md:mt-16 md:justify-center">
           <motion.img
             className="md:w-62 md:-mt-20"
             alt="home-pageGraphic"

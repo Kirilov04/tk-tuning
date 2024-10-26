@@ -11,8 +11,9 @@ import { Benefit } from './Benefit';
 const benefits: Array<BenefitType> = [
   {
     icon: <HomeModernIcon className="h-6 w-6" />,
-    title: 'State of the art Facilities',
-    description: 'Neque adiscing amet amet enim. Feugiat dolor',
+    title: 'most modern technologies',
+    description:
+      'we use expensive devices such as Fox Flasher, Kess, ECUHELP KT-200',
   },
   {
     icon: <UserGroupIcon className="h-6 w-6" />,
